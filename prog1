@@ -1,22 +1,22 @@
 #include "stdafx.h"
 #include <iostream>
-#include <string.h>
-#include <tchar.h>
+#include <string.h> // no need
+#include <tchar.h> // зачем?
 #include <string>
-#include <stdlib.h>
+#include <stdlib.h> // why use c-library header?
 
 
-using namespace::std;
+using namespace::std; // using namespace std;
 class Sotrudnik
 {   
-	       friend class FriendSotrudnik;
-	 string surname;
+	       friend class FriendSotrudnik; // форматирование
+	 string surname; // форматирование
 	int  oklad;
 	double more;
 	friend void print(const Sotrudnik &x);
 	               
 public:
-	explicit Sotrudnik(int oklad) { oklad = 0; };
+	explicit Sotrudnik(int oklad) { oklad = 0; }; // зачем тогда принимается параметр?
 
 	Sotrudnik() 
 	{
@@ -24,29 +24,30 @@ public:
 		oklad = 0;
 		more = 0;
 	};
-	Sotrudnik(string sur, int s, double b) 
+	Sotrudnik(string sur, int s, double b)  // объекты лучше получать по ссылке, чтобы они не копировались (string)
 	{ 
-		               surname=sur;
+		               surname=sur; // форматирование
 	                     oklad = s;
-	                      more = b;
+	                      more = b; // форматирование
 	}
 	
+	// форматирование
 		 double zarplata() const 
 		 {
 			 return oklad + (more / 100.);
 		 };
 		 void print() const
 		 { 
-			  cout << "  \n Surname of the epmloyee :\n " << surname;
+			  cout << "  \n Surname of the epmloyee :\n " << surname; // std::endl вместо \n
 			  cout<< "  \nHis salary: \n " << oklad;
 			  cout << " \n His bonus:\n " << more;
-			  cout<< " \n Total salary: \n" << oklad + (more / 100.);
+			  cout<< " \n Total salary: \n" << oklad + (more / 100.); // а если расчет зарплаты изменится, править в двух местах?
 
 		 };
 
 	                                
 		
-		 ~Sotrudnik() {};
+		 ~Sotrudnik() {}; // Советую сделать здесь cout << "object destroyed" << endl;
 };
 
 class FriendSotrudnik 
@@ -60,12 +61,12 @@ class FriendSotrudnik
 
 	};
 };
-double zar(int x, double y)
+double zar(int x, double y) // unused?
 {
 	return double(x) + (y/100);
 };
 
-void printSotrudnik(const Sotrudnik* s) {
+void printSotrudnik(const Sotrudnik* s) { // unused?
 	s->print();
 }
 
@@ -78,6 +79,7 @@ void print(const Sotrudnik &x)
 
 int main()
 {
+	// В с++ объявление может стоять где угодно внутри блока, поэтому принято переносить объявление ближе к месту использования.
 	Sotrudnik x;
 	FriendSotrudnik yfriend;
 	int n;
@@ -90,8 +92,8 @@ int main()
 	p = new Sotrudnik*[n];
 
 
-	double* sal = new double[n];
-	for (int i = 0; i < n; i++)
+	double* sal = new double[n]; // зачем нужен этот массив, если вы храните объекты Сотрудник?
+	for (int i = 0; i < n; i++) // https://books.google.ru/books?id=mmjVIC6WolgC&pg=PT147&lpg=PT147&dq=sutter+prefix+increment#v=onepage&q=sutter%20prefix%20increment&f=false
 	{    
 		cout << "\nEmployee number  " << (i + 1) << "\n" << "Surname please:\n ";
 		cin.clear();
@@ -106,12 +108,12 @@ int main()
 		cout << "\nBonus salary: \n";
 		cin >> b;
 		cout << "\nTotal salary: \n";
-		          p[i] = new Sotrudnik(sur, s,b);
+		          p[i] = new Sotrudnik(sur, s, b); // форматирование
 		                    sal[i] = p[i]->zarplata();
 		                                   cout << sal[i];
  	};
 	for (int i = 0; i<n; i++) p[i]->print();
-	for (int j = 0; j < n; j++) sum += sal[j];
+	for (int j = 0; j < n; j++) sum += sal[j]; // p[j]->zarplata()
 	cout << "\nTotal Summ = \n " << sum;
 	cout << "\n\n";
 
@@ -119,8 +121,11 @@ int main()
 	cout << "\n\n";
 	yfriend.printFriendSotrudnik(x);
 
-	delete p;
+	delete p; // p is an array
 	delete[]sal;
+	
+	// Предлагаю удивиться, что cout << "object destroyed" << endl; выполнится только один раз для объекта x,
+	// хотя создано было явно больше сотрудников. 
 
     return 0;
 }

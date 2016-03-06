@@ -1,0 +1,108 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+
+
+using namespace std;
+class Sotrudnik
+{
+	friend class FriendSotrudnik;
+	string surname;
+	int  oklad;
+	double more;
+	friend void print(const Sotrudnik &x);
+
+public:
+	explicit Sotrudnik(int oklad) { oklad = 0; };
+
+	Sotrudnik()
+	{
+		surname = "default";
+		oklad = 531;
+		more = 0;
+	};
+	Sotrudnik(string& sur, int s, double b)
+	{
+		surname = sur;
+		oklad = s;
+		more = b;
+	}
+
+	double zarplata() const
+	{
+		return oklad + (more / 100.);
+	};
+	void print() const
+	{
+		cout << "  \n Surname of the employee : \n" << surname;
+		cout << "  \nHis salary: \n" << oklad;
+		cout << " \n His bonus: \n" << more;
+	};
+	~Sotrudnik() { cout << " Object destroyed \n "; };
+};
+
+class FriendSotrudnik
+{
+public:
+	void printFriendSotrudnik(const Sotrudnik &y)
+	{
+		cout << "Sotrudnik \n";
+		cout << y.surname;
+		cout << y.oklad;
+		cout << y.more;
+	};
+};
+
+void print(const Sotrudnik &x)
+{
+	cout << x.surname;
+	cout << x.oklad;
+	cout << x.more;
+}
+
+int main()
+{
+	Sotrudnik x;
+	FriendSotrudnik yfriend;
+	int n;
+	string sur;
+	double b, 
+	int s;
+	cout << "Vvedite kol-vo sotrudnikov \n";
+	cin >> n;
+	Sotrudnik **p;
+	p = new Sotrudnik*[n];
+
+
+	for (int i = 0; i < n; i++)
+	{
+		cout << "\nEmployee number  " << (i + 1) << "\n" << "Surname please: \n";
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		getline(cin, sur);
+
+		cout << sur;
+		cout << "\nHis/her salary: \n";
+		cin >> s;
+		cout << "\nBonus salary: \n";
+		cin >> b;
+		p[i] = new Sotrudnik(sur, s, b);
+		p[i]->print();
+	};
+	double sum = 0;
+	for (int j = 0; j < n; j++) sum += p[j]->zarplata();
+
+	cout << "\nTotal Summ = \n" << sum;
+	cout << "\n\n";
+
+	print(x);
+	cout << "\n\n";
+	yfriend.printFriendSotrudnik(x);
+
+	for (int i = 0; i < n; i++)
+	{
+		delete p[i];
+	}
+	delete[] p;
+	return 0;
+}

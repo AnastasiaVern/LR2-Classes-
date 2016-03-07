@@ -21,7 +21,7 @@ public:
 		oklad = 531;
 		more = 0;
 	};
-	Sotrudnik(string& sur, int s, double b)
+	Sotrudnik(const string& sur, int s, double b)
 	{
 		surname = sur;
 		oklad = s;
